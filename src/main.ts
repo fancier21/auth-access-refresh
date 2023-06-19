@@ -1,13 +1,7 @@
 import http from 'http';
+import { app } from './api/index';
 
-export const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(
-        JSON.stringify({
-            data: 'It Works!',
-        })
-    );
-});
+export const server = http.createServer(app);
 
 const start = async (): Promise<void> => {
     try {
