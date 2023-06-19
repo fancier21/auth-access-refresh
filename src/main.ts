@@ -1,22 +1,23 @@
-import express, { Request, Response } from "express";
+import http from 'http';
 
-const app = express();
-
-app.use(express.json());
-
-app.get("/", (req: Request, res: Response): Response => {
-  return res.send("Hello, World!");
+export const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(
+        JSON.stringify({
+            data: 'It Works!',
+        })
+    );
 });
 
 const start = async (): Promise<void> => {
-  try {
-    app.listen(3000, () => {
-      console.log("Server started on port 3000");
-    });
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
+    try {
+        server.listen(3000, () => {
+            console.log('Server started on port 3000');
+        });
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
 };
 
 void start();
