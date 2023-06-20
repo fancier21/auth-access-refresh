@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express';
 
-export const signIn = (req: Request, res: Response) => {
-    const {username, password} = req.body
+export const signIn = (req: Request, res: Response): void => {
+    const { username, password } = req.body;
 
     /**
      * @todo validate credentials
@@ -12,8 +12,8 @@ export const signIn = (req: Request, res: Response) => {
      * @todo if the passwords match, generate access token
      * @todo generate tockenId by UUID
      * @todo generate refresh token by user and tokenId
-     * @todo add refresh token to cookie 
-     * @todo hash refresh token and add to the db by tokenId, user.id, refresh token 
+     * @todo add refresh token to cookie
+     * @todo hash refresh token and add to the db by tokenId, user.id, refresh token
      * @send access token to user
      */
 
