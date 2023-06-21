@@ -4,7 +4,7 @@ import { Pool, type PoolClient, type QueryResult } from 'pg';
 dotenv.config();
 
 const pool = new Pool({
-    host: process.env.PG_HOST,
+    // host: process.env.PG_HOST,
     port: parseInt(process.env.PG_PORT ?? '5432', 10),
     user: process.env.PG_USER,
     password: process.env.PG_PASSWORD,
@@ -17,17 +17,13 @@ interface ExtendedPoolClient extends PoolClient {
 
 export const query = async (
     text: string,
-    params: any[]
+    params?: any[]
 ): Promise<QueryResult> => {
-    try {
-        const start = Date.now();
-        const res = await pool.query(text, params);
-        const duration = Date.now() - start;
-        console.log('executed query', { text, duration, rows: res?.rowCount });
-        return res;
-    } catch (error) {
-        return await Promise.reject(error);
-    }
+    const start = Date.now();
+    const res = await pool.query(text, params);
+    const duration = Date.now() - start;
+    console.log('executed query', { text, duration, rows: res?.rowCount });
+    return res;
 };
 
 export const getClient = async (): Promise<ExtendedPoolClient> => {

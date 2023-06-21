@@ -1,0 +1,24 @@
+@baseUrl=http://localhost:3000/api
+
+GET {{baseUrl}}/auth/refresh
+
+###
+
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+    "email": "ed@gmail.com",
+    "username": "uname1",
+    "password": "Password1"
+}
+
+###
+
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+    "username": "uname1",
+    "password": "Password1"
+}

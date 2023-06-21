@@ -1,8 +1,10 @@
 import { type Request, type Response } from 'express';
+import { randomUUID } from 'crypto';
+import * as db from '../../../db/db';
+import { Crypto } from '../../utils/crypto';
+import { genAccessToken, genRefreshToken } from '../../utils/token';
 
-export const signIn = (req: Request, res: Response): void => {
-    const { username, password } = req.body;
-
+export const signIn = async (req: Request, res: Response): Promise<any> => {
     /**
      * @todo validate credentials
      * @todo check if user exists in db
@@ -17,5 +19,38 @@ export const signIn = (req: Request, res: Response): void => {
      * @send access token to user
      */
 
-    res.json({});
+    try {
+        const { username, password } = req.body;
+        const user = await db.query('SELECT * FROM users WHERE username = $1', [
+            username,
+        ]);
+        if (user.rows.length === 0) {
+            throw new Error('User not found');
+        }
+
+        const userData = user.rows[0];
+        const match = await Crypto.verify(userData?.password, password);
+        if (!match) {
+            throw new Error('Invalid password');
+        }
+
+        const accessToken = await genAccessToken(userData);
+        const tokenId = randomUUID();
+        const refreshToken = await genRefreshToken(userData, tokenId);
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 30 * 1000, // 30 days
+        });
+
+        await db.query(
+            'INSERT INTO refresh_tokens (hashed_token, user_id) VALUES ($1, $2)',
+            [refreshToken, userData.id]
+        );
+
+        res.json({ token: accessToken });
+    } catch (error) {
+        console.log('ERROR', error);
+        return res.status(500).json({ error: 'Internal Error' });
+    }
 };
