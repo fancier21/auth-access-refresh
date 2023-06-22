@@ -2,36 +2,58 @@ import { type Request, type Response } from 'express';
 import { Crypto } from '../../utils/crypto';
 import * as db from '../../../db/db';
 
-export const signUp = async (req: Request, res: Response): Promise<any> => {
-    /**
-     * @todo validate fields
-     * @todo check if user exists in db
-     * @todo hash the password before storing database
-     */
+interface FieldErrors {
+    email?: string;
+    username?: string;
+}
+
+export const signUp = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, username, password } = req.body;
 
-        const hashedPassword = await Crypto.hash(password);
         const existingUser = await db.query(
-            'SELECT * FROM users WHERE email = $1',
-            [email]
+            'SELECT * FROM users WHERE email = $1 OR username = $2',
+            [email, username]
         );
-        if (existingUser.rows.length > 0) {
-            throw new Error('Email already exists');
+
+        if (existingUser.rowCount > 0) {
+            const fieldErrors: FieldErrors = {};
+
+            for (const user of existingUser.rows) {
+                if (user.email === email) {
+                    fieldErrors.email = 'Email already exists';
+                }
+                if (user.username === username) {
+                    fieldErrors.username = 'Username already exists';
+                }
+            }
+
+            res.status(409).json({ errors: fieldErrors });
+            return;
         }
+
+        const hashedPassword = await Crypto.hash(password);
+
         const newUser = await db.query(
-            'INSERT INTO users (email, username, password) VALUES ($1, $2, $3)',
+            'INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING email, username',
             [email, username, hashedPassword]
         );
-        console.log('NEW', newUser);
 
-        const user = {
-            email,
-            username,
+        if (newUser.rowCount !== 1) {
+            res.status(400).json({ error: 'Failed to create user' });
+            return;
+        }
+
+        const { email: userEmail, username: userUsername } = newUser.rows[0];
+        const userData = {
+            email: userEmail,
+            username: userUsername,
         };
-        res.json(user);
+
+        res.json(userData);
     } catch (error) {
-        console.log('ERROR', error);
-        return res.status(500).json({ error: 'Internal Error' });
+        console.error('ERROR', error);
+
+        res.status(500).json({ error: 'Internal Error' });
     }
 };

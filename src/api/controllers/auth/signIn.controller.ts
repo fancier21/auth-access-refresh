@@ -4,53 +4,50 @@ import * as db from '../../../db/db';
 import { Crypto } from '../../utils/crypto';
 import { genAccessToken, genRefreshToken } from '../../utils/token';
 
-export const signIn = async (req: Request, res: Response): Promise<any> => {
-    /**
-     * @todo validate credentials
-     * @todo check if user exists in db
-     * @todo if not, throw error 404, User not found
-     * @todo if exists, compare passwords
-     * @todo if password wrong, throw error 401, Wrong password
-     * @todo if the passwords match, generate access token
-     * @todo generate tockenId by UUID
-     * @todo generate refresh token by user and tokenId
-     * @todo add refresh token to cookie
-     * @todo hash refresh token and add to the db by tokenId, user.id, refresh token
-     * @send access token to user
-     */
-
+export const signIn = async (req: Request, res: Response): Promise<void> => {
     try {
         const { username, password } = req.body;
+
         const user = await db.query('SELECT * FROM users WHERE username = $1', [
             username,
         ]);
-        if (user.rows.length === 0) {
-            throw new Error('User not found');
+
+        if (user.rowCount === 0) {
+            res.status(404).json({ error: 'User not found' });
+            return;
         }
 
         const userData = user.rows[0];
         const match = await Crypto.verify(userData?.password, password);
+
         if (!match) {
-            throw new Error('Invalid password');
+            res.status(401).json({ error: 'Invalid password' });
+            return;
         }
 
         const accessToken = await genAccessToken(userData);
         const tokenId = randomUUID();
         const refreshToken = await genRefreshToken(userData, tokenId);
 
+        try {
+            await db.query(
+                'INSERT INTO refresh_tokens (hashed_token, user_id) VALUES ($1, $2)',
+                [refreshToken, userData.id]
+            );
+        } catch (error) {
+            console.error('ERROR', error);
+            res.status(500).json({ error: 'Failed to insert refresh token' });
+            return;
+        }
+
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            maxAge: 24 * 60 * 60 * 30 * 1000, // 30 days
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
         });
-
-        await db.query(
-            'INSERT INTO refresh_tokens (hashed_token, user_id) VALUES ($1, $2)',
-            [refreshToken, userData.id]
-        );
 
         res.json({ token: accessToken });
     } catch (error) {
-        console.log('ERROR', error);
-        return res.status(500).json({ error: 'Internal Error' });
+        console.error('ERROR', error);
+        res.status(500).json({ error: 'Internal Error' });
     }
 };
