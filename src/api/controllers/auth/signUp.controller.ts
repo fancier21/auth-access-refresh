@@ -53,7 +53,6 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
         res.json(userData);
     } catch (error) {
         console.error('ERROR', error);
-
         res.status(500).json({ error: 'Internal Error' });
     }
 };
