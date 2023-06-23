@@ -1,9 +1,5 @@
 @baseUrl=http://localhost:3000/api
 
-GET {{baseUrl}}/auth/refresh
-
-###
-
 POST {{baseUrl}}/auth/signup
 Content-Type: application/json
 
@@ -22,3 +18,10 @@ Content-Type: application/json
     "username": "uname1",
     "password": "Password1"
 }
+
+GET {{baseUrl}}/auth/refresh
+Content-Type: application/json
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RJZCI6ImQ3NWY1MjY2LTc1MzgtNGI4NC1iMWEyLTUyY2M4OTcxOTI3OCIsImlkIjoiZWNmNGE2MmMtN2Q5Yi00NDM4LWE5YmEtYmZjMTU2NDBhZjQwIiwidXNlcm5hbWUiOiJ1bmFtZTEiLCJlbWFpbCI6ImVkQGdtYWlsLmNvbSIsImlhdCI6MTY4NzUzMjY3OSwiZXhwIjoxNjkwMTI0Njc5fQ.8Z4vHty_7F4o5CmiKuERU350plgctUOZ1N4m9tqQ18Y; Max-Age=2592000; Path=/; Expires=Sun, 23 Jul 2023 15:04:39 GMT; HttpOnly
+
+###
+

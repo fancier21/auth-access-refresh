@@ -29,16 +29,12 @@ export const signIn = async (req: Request, res: Response): Promise<void> => {
         const tokenId = randomUUID();
         const refreshToken = await genRefreshToken(userData, tokenId);
 
-        try {
-            await db.query(
-                'INSERT INTO refresh_tokens (hashed_token, user_id) VALUES ($1, $2)',
-                [refreshToken, userData.id]
-            );
-        } catch (error) {
-            console.error('ERROR', error);
-            res.status(500).json({ error: 'Failed to insert refresh token' });
-            return;
-        }
+        const hashedToken = await Crypto.hash(refreshToken);
+
+        await db.query(
+            'INSERT INTO refresh_tokens (id, hashed_token, user_id) VALUES ($1, $2, $3)',
+            [tokenId, hashedToken, userData.id]
+        );
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,

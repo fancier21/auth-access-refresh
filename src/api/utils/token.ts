@@ -28,12 +28,12 @@ const genToken = async (
 };
 
 export const genAccessToken = async (user: User): Promise<string> => {
-    return await genToken(user, process.env.ACCESS_TOKEN!, '5m');
+    return await genToken(user, process.env.ACCESS_TOKEN, '5m');
 };
 
 export const genRefreshToken = async (
     user: User,
     tokenId: string
 ): Promise<string> => {
-    return await genToken(user, process.env.REFRESH_TOKEN!, '30d', tokenId);
+    return await genToken(user, process.env.REFRESH_TOKEN, '30d', tokenId);
 };
