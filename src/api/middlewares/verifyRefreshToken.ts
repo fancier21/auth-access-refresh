@@ -20,11 +20,17 @@ export const verifyRefreshToken = async (
             return;
         }
 
-        const decoded = jwt.verify(token, process.env.REFRESH_TOKEN) as any;
+        let user;
+        try {
+            user = jwt.verify(token, process.env.REFRESH_TOKEN) as any;
+        } catch (error) {
+            res.status(400).json({ error: 'Invalid refresh token' });
+            return;
+        }
 
         const queryResult = await db.query(
             'SELECT hashed_token FROM refresh_tokens WHERE id = $1',
-            [decoded.jwtId]
+            [user.jwtId]
         );
 
         if (queryResult.rowCount === 0) {
@@ -41,7 +47,7 @@ export const verifyRefreshToken = async (
             return;
         }
 
-        req.user = decoded;
+        req.user = user;
 
         next();
     } catch (error) {

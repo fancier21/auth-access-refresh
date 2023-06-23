@@ -2,7 +2,10 @@ import { type Request, type Response } from 'express';
 import jwt from 'jsonwebtoken';
 import db from '../../../db/db';
 
-export const signOut = async (req: Request, res: Response): Promise<void> => {
+export const signOutAll = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
     try {
         const refreshToken = req.cookies.refreshToken;
 
@@ -19,8 +22,8 @@ export const signOut = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        await db.query('DELETE FROM refresh_tokens WHERE id = $1', [
-            user.jwtId,
+        await db.query('DELETE FROM refresh_tokens WHERE user_id = $1', [
+            user.id,
         ]);
         res.clearCookie('refresh_token');
 

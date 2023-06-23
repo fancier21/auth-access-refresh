@@ -17,8 +17,8 @@ export const verifyAccessToken = (
             const token = authHeader.split(' ')[1]; // Extract the token from the header
 
             try {
-                const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
-                req.user = decoded;
+                const user = jwt.verify(token, process.env.ACCESS_TOKEN);
+                req.user = user;
 
                 next();
             } catch (error) {
