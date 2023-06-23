@@ -21,7 +21,6 @@ export const verifyRefreshToken = async (
         }
 
         const decoded = jwt.verify(token, process.env.REFRESH_TOKEN) as any;
-        console.log('DECODED', decoded);
 
         const queryResult = await db.query(
             'SELECT hashed_token FROM refresh_tokens WHERE id = $1',
@@ -29,7 +28,7 @@ export const verifyRefreshToken = async (
         );
 
         if (queryResult.rowCount === 0) {
-            res.status(400).json({ error: 'Refresh token does not exist' });
+            res.status(400).json({ error: 'Invalid refresh token' });
             return;
         }
 
