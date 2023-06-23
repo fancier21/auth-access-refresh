@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import { Crypto } from '../../utils/crypto';
+import * as Crypto from '../../utils/crypto';
 import * as db from '../../../db/db';
 
 interface FieldErrors {

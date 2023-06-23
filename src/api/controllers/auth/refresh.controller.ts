@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { type Request, type Response } from 'express';
 import { genAccessToken, genRefreshToken } from '../../utils/token';
 import db from '../../../db/db';
-import { Crypto } from '../../utils/crypto';
+import * as Crypto from '../../utils/crypto';
 
 interface CustomRequest extends Request {
     user?: any;

@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express';
 import { randomUUID } from 'crypto';
 import * as db from '../../../db/db';
-import { Crypto } from '../../utils/crypto';
+import * as Crypto from '../../utils/crypto';
 import { genAccessToken, genRefreshToken } from '../../utils/token';
 
 export const signIn = async (req: Request, res: Response): Promise<void> => {
