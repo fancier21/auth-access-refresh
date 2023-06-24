@@ -6,7 +6,7 @@ import { genAccessToken, genRefreshToken } from '../../utils/token';
 
 export const signIn = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { username, password } = req.body;
+        const { username, password } = req.user;
 
         const user = await db.query('SELECT * FROM users WHERE username = $1', [
             username,

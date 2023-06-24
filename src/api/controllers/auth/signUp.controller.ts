@@ -9,7 +9,7 @@ interface FieldErrors {
 
 export const signUp = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, username, password } = req.body;
+        const { email, username, password } = req.user;
 
         const existingUser = await db.query(
             'SELECT * FROM users WHERE email = $1 OR username = $2',

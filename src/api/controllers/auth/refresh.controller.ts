@@ -4,14 +4,7 @@ import { genAccessToken, genRefreshToken } from '../../utils/token';
 import db from '../../../db/db';
 import * as Crypto from '../../utils/crypto';
 
-interface CustomRequest extends Request {
-    user?: any;
-}
-
-export const refresh = async (
-    req: CustomRequest,
-    res: Response
-): Promise<void> => {
+export const refresh = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = req.user;
         const newTokenId = randomUUID();

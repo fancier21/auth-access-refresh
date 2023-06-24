@@ -3,12 +3,8 @@ import jwt from 'jsonwebtoken';
 import db from '../../db/db';
 import * as Crypto from '../utils/crypto';
 
-interface CustomRequest extends Request {
-    user?: any;
-}
-
 export const verifyRefreshToken = async (
-    req: CustomRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {

@@ -23,7 +23,7 @@ const genToken = async (
         });
         return token;
     } catch (error) {
-        console.error('---- TOKEN GEN ERR', error);
+        console.error('TOKEN GEN ERR', error);
     }
 };
 

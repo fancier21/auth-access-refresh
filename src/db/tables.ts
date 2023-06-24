@@ -4,7 +4,6 @@ export async function createTables(): Promise<any> {
     try {
         const addUUID = 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"';
 
-        // Table creation queries
         const createTableUser = `
           CREATE TABLE IF NOT EXISTS users (
             id         UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -24,7 +23,6 @@ export async function createTables(): Promise<any> {
           )
         `;
 
-        // Execute table creation queries
         await db.query(addUUID);
         await db.query(createTableUser);
         await db.query(createTableRefreshToken);

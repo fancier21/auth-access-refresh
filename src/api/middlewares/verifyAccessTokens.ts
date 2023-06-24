@@ -1,12 +1,8 @@
 import { type Response, type Request, type NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-interface CustomRequest extends Request {
-    user?: any;
-}
-
 export const verifyAccessToken = (
-    req: CustomRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ): void => {
