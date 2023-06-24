@@ -15,20 +15,15 @@ export const signUpValidation = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        // Validate request body against the defined schema
         const validatedData = await signupSchema.validateAsync(req.body, {
             abortEarly: false,
         });
         console.log('Signup validated', validatedData);
 
-        // Attach the validated data to the request object for later use
         req.user = validatedData;
 
-        // Proceed to the next middleware or route handler
         next();
     } catch (error) {
-        console.log('Signup validated', error);
-        // If validation fails, handle the error and structure the field errors
         const fieldErrors: Record<string, string> = {};
         error.details.forEach((detail: any) => {
             fieldErrors[detail.context.key] = detail.message;

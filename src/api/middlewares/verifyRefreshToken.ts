@@ -1,7 +1,7 @@
 import { type Response, type Request, type NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 import db from '../../db/db';
 import * as Crypto from '../utils/crypto';
+import { verifyToken } from '../utils/verifyToken';
 
 export const verifyRefreshToken = async (
     req: Request,
@@ -18,7 +18,7 @@ export const verifyRefreshToken = async (
 
         let user;
         try {
-            user = jwt.verify(token, process.env.REFRESH_TOKEN) as any;
+            user = await verifyToken(token, process.env.REFRESH_TOKEN);
         } catch (error) {
             res.status(400).json({ error: 'Invalid refresh token' });
             return;

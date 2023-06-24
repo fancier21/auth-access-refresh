@@ -15,7 +15,7 @@ POST {{baseUrl}}/auth/signin
 Content-Type: application/json
 
 {
-    "username": "uname1",
+    "username": "uname4",
     "password": "Password1"
 }
 
@@ -26,12 +26,11 @@ Content-Type: application/json
 
 DELETE {{baseUrl}}/auth/signout
 Content-Type: application/json
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RJZCI6IjVhNGZkZjgyLWQzNGUtNGY4Zi1hNjM4LTRiYjhkYjlkNGM2ZiIsImlkIjoiZWNmNGE2MmMtN2Q5Yi00NDM4LWE5YmEtYmZjMTU2NDBhZjQwIiwidXNlcm5hbWUiOiJ1bmFtZTEiLCJlbWFpbCI6ImVkQGdtYWlsLmNvbSIsImlhdCI6MTY4NzU0MTYzMCwiZXhwIjoxNjkwMTMzNjMwfQ.uvB5kJWgvWYOsEzYzldUGJgtYTK_Yyytnrbe2b9WeC4; Max-Age=2592000; Path=/; Expires=Sun, 23 Jul 2023 17:33:50 GMT; HttpOnly
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RJZCI6IjlkOWE4YzAyLWMwZTItNDViMC05Y2RlLWJhMzA3OTU3ZGFhNCIsImlkIjoiZWExMWE0NWItOTQyNy00MGNlLWFkYmEtZDQyOWExZmFkMzIyIiwidXNlcm5hbWUiOiJ1bmFtZTQiLCJlbWFpbCI6ImxhbmFAZ21haWwuY29tIiwiaWF0IjoxNjg3NjQ1MjgyLCJleHAiOjE2OTAyMzcyODJ9.XBLgKQocP90YHHVL2ic7c4y5xumUsOtWt9zAOk-S84A; Max-Age=2592000; Path=/; Expires=Mon, 24 Jul 2023 22:21:22 GMT; HttpOnly
 
 ###
 
 DELETE {{baseUrl}}/auth/signout_all
 Content-Type: application/json
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RJZCI6IjVhNGZkZjgyLWQzNGUtNGY4Zi1hNjM4LTRiYjhkYjlkNGM2ZiIsImlkIjoiZWNmNGE2MmMtN2Q5Yi00NDM4LWE5YmEtYmZjMTU2NDBhZjQwIiwidXNlcm5hbWUiOiJ1bmFtZTEiLCJlbWFpbCI6ImVkQGdtYWlsLmNvbSIsImlhdCI6MTY4NzU0MTYzMCwiZXhwIjoxNjkwMTMzNjMwfQ.uvB5kJWgvWYOsEzYzldUGJgtYTK_Yyytnrbe2b9WeC4; Max-Age=2592000; Path=/; Expires=Sun, 23 Jul 2023 17:33:50 GMT; HttpOnly
 
 ###

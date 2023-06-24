@@ -1,11 +1,11 @@
 import { type Response, type Request, type NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import { verifyToken } from '../utils/verifyToken';
 
-export const verifyAccessToken = (
+export const verifyAccessToken = async (
     req: Request,
     res: Response,
     next: NextFunction
-): void => {
+): Promise<void> => {
     try {
         const authHeader = req.headers.authorization;
 
@@ -13,7 +13,7 @@ export const verifyAccessToken = (
             const token = authHeader.split(' ')[1]; // Extract the token from the header
 
             try {
-                const user = jwt.verify(token, process.env.ACCESS_TOKEN);
+                const user = await verifyToken(token, process.env.ACCESS_TOKEN);
                 req.user = user;
 
                 next();

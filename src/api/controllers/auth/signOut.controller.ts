@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
-import jwt from 'jsonwebtoken';
 import db from '../../../db/db';
+import { verifyToken } from '../../utils/verifyToken';
 
 export const signOut = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -13,7 +13,7 @@ export const signOut = async (req: Request, res: Response): Promise<void> => {
 
         let user;
         try {
-            user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN) as any;
+            user = await verifyToken(refreshToken, process.env.REFRESH_TOKEN);
         } catch (error) {
             res.status(400).json({ error: 'Invalid refresh token' });
             return;

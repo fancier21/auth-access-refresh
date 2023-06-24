@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { type Request, type Response } from 'express';
-import { genAccessToken, genRefreshToken } from '../../utils/token';
+import { genAccessToken, genRefreshToken } from '../../utils/signToken';
 import db from '../../../db/db';
 import * as Crypto from '../../utils/crypto';
 
